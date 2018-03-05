@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      论文阅读——Semi-Supervised Learning Enabled by Multiscale Deep Neural Network Inversion | 一只番茄 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Aimee">
+    
+    
+
+    <meta name="description" content="题目 Semi-Supervised Learning Enabled by Multiscale Deep Neural Network Inversion  作者 Randall Balestriero 日期 2018年 来源 arxiv tag:semi-supervised learning;loss function 亮点：作者提出一个通用的loss function 使得任何拓扑结构的">
+<meta name="keywords" content="semi-supervised learning,loss function">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文阅读——Semi-Supervised Learning Enabled by Multiscale Deep Neural Network Inversion | 一只番茄">
+<meta property="og:url" content="http://yoursite.com/2018/03/05/论文阅读——Semi-Supervised Learning Enabled by Multiscale Deep Neural Network Inversion /index.html">
+<meta property="og:site_name" content="一只番茄">
+<meta property="og:description" content="题目 Semi-Supervised Learning Enabled by Multiscale Deep Neural Network Inversion  作者 Randall Balestriero 日期 2018年 来源 arxiv tag:semi-supervised learning;loss function 亮点：作者提出一个通用的loss function 使得任何拓扑结构的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEB91702e38e754eca6d4054834208a17f6?method=download&shareKey=04436358e88b909f9c1f7946a4b67c89">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEB1703f9217262c26297e2d9ab3e7de275?method=download&shareKey=205c25415c2bcfe784d132d60f161d22">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEB410e208ca5227bd1379d8a02c2c62970?method=download&shareKey=5168f47e29e2c5083b48a90953a9fb21">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEB347ef37938e1b03d3cd3eefd22ac431b?method=download&shareKey=5f0459f2a3f9accd7288e762449e28cd">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEBf10f8ca06b186c4e073f852c30767cd1?method=download&shareKey=7ea2f2fdfaeeb448053f5d98c9dcf657">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEB1416c1f0261412360623facad8e0c26f?method=download&shareKey=599ae6c87a754dfcd00bc0f7556dd6bc">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEB597294593e104f9f33882ab15b3a0c7e?method=download&shareKey=93a2c2e4686845aa67bf1e8ff741708a">
+<meta property="og:updated_time" content="2018-03-05T11:37:22.476Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="论文阅读——Semi-Supervised Learning Enabled by Multiscale Deep Neural Network Inversion | 一只番茄">
+<meta name="twitter:description" content="题目 Semi-Supervised Learning Enabled by Multiscale Deep Neural Network Inversion  作者 Randall Balestriero 日期 2018年 来源 arxiv tag:semi-supervised learning;loss function 亮点：作者提出一个通用的loss function 使得任何拓扑结构的">
+<meta name="twitter:image" content="https://note.youdao.com/yws/api/personal/file/WEB91702e38e754eca6d4054834208a17f6?method=download&shareKey=04436358e88b909f9c1f7946a4b67c89">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+<body>
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">一只番茄</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">论文阅读——Semi-Supervised Learning Enabled by Multiscale Deep Neural Network Inversion</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2018-03-05" class="post-meta__date date">2018-03-05</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+             &#8226; 标签:
+            <font class="tags">
+              <a class="tags-link" href="/tags/loss-function/">loss function</a>, <a class="tags-link" href="/tags/semi-supervised-learning/">semi-supervised learning</a>
+            </font>
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>题目 Semi-Supervised Learning Enabled by Multiscale Deep Neural Network Inversion </p>
+<p>作者 Randall Balestriero</p>
+<p>日期 2018年</p>
+<p>来源 arxiv</p>
+<p>tag:semi-supervised learning;loss function</p>
+<p>亮点：作者提出一个通用的loss function 使得任何拓扑结构的DNNs都可以进行半监督学习，同时不需要多余的超参数。</p>
+<a id="more"></a>
+<p>主要贡献：</p>
+<p>完整的分析论文[1]中的loss function，利用loss-dependent重整化消除超参数</p>
+<p>介绍一种新的半监督学习多尺度损失，这个损失函数对初始化、标记数据集的采样以及输入中的噪音呈现具有鲁棒性。</p>
+<p>详尽的实验说明了方法的实现了state-of-art的结果</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB91702e38e754eca6d4054834208a17f6?method=download&amp;shareKey=04436358e88b909f9c1f7946a4b67c89" alt=""></p>
+<p>公式：</p>
+<p>1.去超参数</p>
+<p>原先：</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB1703f9217262c26297e2d9ab3e7de275?method=download&amp;shareKey=205c25415c2bcfe784d132d60f161d22" alt=""></p>
+<p>改进：</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB410e208ca5227bd1379d8a02c2c62970?method=download&amp;shareKey=5168f47e29e2c5083b48a90953a9fb21" alt=""></p>
+<p>2.将全局loss（$Γ$）改为多尺度loss($λ $)</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB347ef37938e1b03d3cd3eefd22ac431b?method=download&amp;shareKey=5f0459f2a3f9accd7288e762449e28cd" alt=""></p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBf10f8ca06b186c4e073f852c30767cd1?method=download&amp;shareKey=7ea2f2fdfaeeb448053f5d98c9dcf657" alt=""></p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB1416c1f0261412360623facad8e0c26f?method=download&amp;shareKey=599ae6c87a754dfcd00bc0f7556dd6bc" alt=""></p>
+<p>因此，文章提出的完整公式为：</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB597294593e104f9f33882ab15b3a0c7e?method=download&amp;shareKey=93a2c2e4686845aa67bf1e8ff741708a" alt=""></p>
+<p>PS，个人认为作者实验的时候，$ \beta = \frac{1}{log(C)},\beta^{(l)}_R = \frac{1}{L} *\frac{1}{D^{(l)}}$</p>
+<p>实验证明：多尺度loss($λ $)要比全局loss（$Γ$）的表现好</p>
+<p>下一步可进行的工作：</p>
+<p>可以通过计算需求和模型能力之间的标准折衷来实现进一步改进。</p>
+<p>找到使得loss function 更加鲁棒的超参数（<script type="math/tex">β_{CE}; β_E; (β^{(l)}_R) ^{L-1}_{l=0}</script>），比如自动更新</p>
+<p>考虑batch size &amp; batch 中未标记样本和已标记样本的比率对大规模网络的适应性学习和鲁棒性的影响。</p>
+<p>[1] R. Balestriero, V. Roger, H. G. Glotin, and R. G. Baraniuk.Semi-Supervised Learning via New Deep Network Inversion. ArXiv e-prints, Nov. 2017 </p>
+
+  </section>
+
+  <section class="post-comments">
+
+    <!-- 将评论系统（例如Disqus、多说、友言、畅言等）提供的代码片段粘贴在这里 -->
+    
+</section>
+
+
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

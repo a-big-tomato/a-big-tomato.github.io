@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
 
     
@@ -19,8 +19,8 @@
     <meta property="og:type" content="website">
 <meta property="og:title" content="归档">
 <meta property="og:url" content="http://yoursite.com/archive/index.html">
-<meta property="og:site_name" content="a big tomato">
-<meta property="og:locale" content="zh-Hans">
+<meta property="og:site_name" content="一只番茄">
+<meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2018-02-05T14:44:16.822Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="归档">
@@ -32,12 +32,12 @@
     <link rel="stylesheet" href="/css/uno.css">
     <link rel="stylesheet" href="/css/highlight.css">
     <link rel="stylesheet" href="/css/archive.css">
-    <link rel="stylesheet" href="/css/china-social-icon.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 </head>
 <body>
 
-    <span class="mobile btn-mobile-menu">
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><span class="mobile btn-mobile-menu">
         <i class="icon icon-list btn-mobile-menu__icon"></i>
         <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
     </span>
@@ -55,7 +55,7 @@
 
         
 
-        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">a big tomato</a></h1>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">一只番茄</a></h1>
         <hr class="panel-cover__divider" />
 
         
@@ -161,13 +161,48 @@ classes that you can use:
 <div class="archive-meta">
 
 
+    <h3>分类</h3>
+
+    <div class="categorieslist">
+        
+          
+            <span><a href="/categories/other/" title="-other">-other<sup>1</sup></a></span>
+          
+        
+     </div>
 
 
 
+    <h3>标签</h3>
+    <div class="tagslist">
+        
+            
+                <span><a href="/tags/MathJax/" title="MathJax">MathJax<sup>1</sup></a></span>
+            
+        
+            
+                <span><a href="/tags/Test/" title="-Test">-Test<sup>1</sup></a></span>
+            
+        
+            
+                <span><a href="/tags/other/" title="-other">-other<sup>1</sup></a></span>
+            
+        
+            
+                <span><a href="/tags/semi-supervised-learning/" title="semi-supervised learning">semi-supervised learning<sup>1</sup></a></span>
+            
+        
+            
+                <span><a href="/tags/loss-function/" title="loss function">loss function<sup>1</sup></a></span>
+            
+        
+    </div>
 
-    <h3>所有文章</h3>
+
+
+    <h3>归档</h3>
     <div class="archiveslist">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">2</span></li></ul>
     </div>
 
 
@@ -205,6 +240,22 @@ classes that you can use:
 <!--[if IE 6]>
   <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
 <![endif]-->
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 </body>
 </html>
