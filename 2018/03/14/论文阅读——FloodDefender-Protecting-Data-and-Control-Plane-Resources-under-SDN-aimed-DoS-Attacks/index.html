@@ -7,7 +7,7 @@
     
 
     <title>
-      一只番茄 
+      论文阅读——FloodDefender-Protecting Data and Control Plane Resources under SDN-aimed DoS Attacks | 一只番茄 
     </title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -16,13 +16,20 @@
     
     
 
-    <meta property="og:type" content="website">
-<meta property="og:title" content="一只番茄">
-<meta property="og:url" content="http://yoursite.com/index.html">
+    <meta name="description" content="论文题目:FloodDefender: Protecting Data and Control Plane Resources under SDN-aimed DoS Attacks  来源:2017 INFOCOM 作者:GAO Shang, PENG Zhe, XIAO Bin, HU Aiqun, REN Kui tag:DDoS;SDN;post-detection procedure;">
+<meta name="keywords" content="DDoS,SDN,post-detection procedure;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文阅读——FloodDefender-Protecting Data and Control Plane Resources under SDN-aimed DoS Attacks | 一只番茄">
+<meta property="og:url" content="http://yoursite.com/2018/03/14/论文阅读——FloodDefender-Protecting-Data-and-Control-Plane-Resources-under-SDN-aimed-DoS-Attacks/index.html">
 <meta property="og:site_name" content="一只番茄">
+<meta property="og:description" content="论文题目:FloodDefender: Protecting Data and Control Plane Resources under SDN-aimed DoS Attacks  来源:2017 INFOCOM 作者:GAO Shang, PENG Zhe, XIAO Bin, HU Aiqun, REN Kui tag:DDoS;SDN;post-detection procedure;">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEBf70befcc5604bf63780176e26a66625c?method=download&shareKey=5284f89978a15d57f170840e231e5366">
+<meta property="og:updated_time" content="2018-03-14T09:43:23.598Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="一只番茄">
+<meta name="twitter:title" content="论文阅读——FloodDefender-Protecting Data and Control Plane Resources under SDN-aimed DoS Attacks | 一只番茄">
+<meta name="twitter:description" content="论文题目:FloodDefender: Protecting Data and Control Plane Resources under SDN-aimed DoS Attacks  来源:2017 INFOCOM 作者:GAO Shang, PENG Zhe, XIAO Bin, HU Aiqun, REN Kui tag:DDoS;SDN;post-detection procedure;">
+<meta name="twitter:image" content="https://note.youdao.com/yws/api/personal/file/WEBf70befcc5604bf63780176e26a66625c?method=download&shareKey=5284f89978a15d57f170840e231e5366">
     
     
     
@@ -42,8 +49,8 @@
     </span>
 
     
- 
-<header class="panel-cover">
+
+<header class="panel-cover panel-cover--collapsed">
 
 
   <div class="panel-main">
@@ -142,28 +149,37 @@ classes that you can use:
         <div class="content-wrapper__inner entry">
             
 
+<article class="post-container post-container--single">
 
-   <!-- do nothing -->
+  <header class="post-header">
+    
+    <h1 class="post-title">论文阅读——FloodDefender-Protecting Data and Control Plane Resources under SDN-aimed DoS Attacks</h1>
 
+    
 
-<div class="main-post-list">
-    <ol class="post-list">
+    <div class="post-meta">
+      <time datetime="2018-03-14" class="post-meta__date date">2018-03-14</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+             &#8226; 标签:
+            <font class="tags">
+              <a class="tags-link" href="/tags/DDoS/">DDoS</a>, <a class="tags-link" href="/tags/SDN/">SDN</a>, <a class="tags-link" href="/tags/post-detection-procedure/">post-detection procedure;</a>
+            </font>
+          
+
+      </span>
+    </div>
     
     
-    <li>
 
-      <h2 class="post-list__post-title post-title">
-        <a href="/2018/03/14/论文阅读——FloodDefender-Protecting-Data-and-Control-Plane-Resources-under-SDN-aimed-DoS-Attacks/" title="link to 论文阅读——FloodDefender-Protecting Data and Control Plane Resources under SDN-aimed DoS Attacks">论文阅读——FloodDefender-Protecting Data and Control Plane Resources under SDN-aimed DoS Attacks</a>
-      </h2>
+  </header>
 
-      <div class="post-list__meta">
-
-        <time datetime="2018-03-14" class="post-list__meta--date date">2018-03-14</time> 
-      </div>
-
-      <div class="excerpt">
-        
-          <p>论文题目:FloodDefender: Protecting Data and Control Plane Resources under SDN-aimed DoS Attacks </p>
+  <section id="post-content" class="article-content post">
+    <p>论文题目:FloodDefender: Protecting Data and Control Plane Resources under SDN-aimed DoS Attacks </p>
 <p>来源:2017 INFOCOM</p>
 <p>作者:GAO Shang, PENG Zhe, XIAO Bin, HU Aiqun, REN Kui</p>
 <p>tag:DDoS;SDN;post-detection procedure;</p>
@@ -171,51 +187,28 @@ classes that you can use:
 <p>(即为检测到了DDoS的攻击之后的操作)</p>
 <p>1.如何在保持短时延、低缺失率正常包转发操作的同时有效处理table-miss的包更为合适</p>
 <p>2.如何在流量开始阶段精确区分攻击流量，而不会消耗计算资源</p>
-        
-      </div>
+<a id="more"></a>
+<p>主要贡献：</p>
+<p>​        1.利用表缺失机制来防止带宽被用完</p>
+<p>​        2.包过滤器来鉴别攻击流量，节约控制平面资源。</p>
+<p>​        3.流规则管理消除交换机流表中无用的流实体</p>
+<p>实验结果：实验同OpenFlow ,FloodGuard相比</p>
+<p>节约了多余70%的软件带宽，20%的硬件带宽，引起不多于0.5%的CPU消耗用于处理攻击流量，同时，精确检测出超过96%的攻击流量，而只引起18ms的包延迟，以及在攻击下5%的包缺失率。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBf70befcc5604bf63780176e26a66625c?method=download&amp;shareKey=5284f89978a15d57f170840e231e5366" alt="FloodDefender 结构"></p>
+<p>具体过程：<br>1.attack detector module 检测攻击，一旦出现DDoS攻击，其他module启动<br>2.table-miss engineering module 安装protecting rules将一些table-miss packets 绕道到邻居交换机。交换机收到detoured table-miss packets，会发送packet_in给控制器<br>3.当控制器收到packet_in时，packet filter 会接收这些信息，然后大致过滤出攻击流量。把过滤后的发给app<br>4.app处理这些包，决定actions和flow rules，前者给switch,后者会被flow rule management module 截获。<br>5.flow rule management module 基于截获的processing rule决定monitoring rules。monitoring rules 在 cache region,截获的processing rules放在flow table region.<br>6.packet filter module 使用 intercepted and monitoring rules 的流量信息精确判定正常流量。如果一个processing flow entry 被视为合法的，就会被移到flow table region。monitoring rules和cache region 会被刷新来节约空间</p>
 
-      <hr class="post-list__divider" />
-    </li>
+  </section>
+
+  <section class="post-comments">
+
+    <!-- 将评论系统（例如Disqus、多说、友言、畅言等）提供的代码片段粘贴在这里 -->
     
-    <li>
-
-      <h2 class="post-list__post-title post-title">
-        <a href="/2018/03/05/论文阅读——Semi-Supervised Learning Enabled by Multiscale Deep Neural Network Inversion /" title="link to 论文阅读——Semi-Supervised Learning Enabled by Multiscale Deep Neural Network Inversion">论文阅读——Semi-Supervised Learning Enabled by Multiscale Deep Neural Network Inversion</a>
-      </h2>
-
-      <div class="post-list__meta">
-
-        <time datetime="2018-03-05" class="post-list__meta--date date">2018-03-05</time> 
-      </div>
-
-      <div class="excerpt">
-        
-          <p>题目 Semi-Supervised Learning Enabled by Multiscale Deep Neural Network Inversion </p>
-<p>作者 Randall Balestriero</p>
-<p>日期 2018年</p>
-<p>来源 arxiv</p>
-<p>tag:semi-supervised learning;loss function</p>
-<p>亮点：作者提出一个通用的loss function 使得任何拓扑结构的DNNs都可以进行半监督学习，同时不需要多余的超参数。</p>
-        
-      </div>
-
-      <hr class="post-list__divider" />
-    </li>
-    
-  </ol>
-
-  <hr class="post-list__divider " />
-
-<nav class="pagination" role="navigation">
-    
-
-    <span class="pagination__page-number"> 1 / 1</span>
-    
-    
-</nav>
+</section>
 
 
-</div>
+</article>
+
+
             <footer class="footer">
 
     <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
@@ -243,6 +236,18 @@ classes that you can use:
 
 
     
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
     
     
     <!--kill ie6 -->
