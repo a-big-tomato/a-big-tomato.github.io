@@ -167,9 +167,9 @@ classes that you can use:
           <p>论文题目:FloodDefender: Protecting Data and Control Plane Resources under SDN-aimed DoS Attacks </p>
 <p>来源:2017 INFOCOM</p>
 <p>作者:GAO Shang, PENG Zhe, XIAO Bin, HU Aiqun, REN Kui</p>
-<p>tag:DDoS;SDN;post-detection procedure;</p>
-<p>主要面向的问题为<strong>缓解</strong>在OpenFlow中SDN中特有的DDoS攻击：</p>
-<p>(即为检测到了DDoS的攻击之后的操作)</p>
+<p>tag:DoS;SDN;post-detection procedure;</p>
+<p>主要面向的问题为<strong>缓解</strong>在OpenFlow中SDN中特有的DoS攻击：</p>
+<p>(即为检测到了DoS的攻击之后的操作)</p>
 <p>1.如何在保持短时延、低缺失率正常包转发操作的同时有效处理table-miss的包更为合适</p>
 <p>2.如何在流量开始阶段精确区分攻击流量，而不会消耗计算资源</p>
         
@@ -249,23 +249,7 @@ classes that you can use:
     <!--kill ie6 -->
 <!--[if IE 6]>
   <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
-<![endif]-->
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<![endif]--><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 </body>
 </html>
