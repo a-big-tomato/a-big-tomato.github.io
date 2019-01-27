@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      论文阅读——DQN系列 | 一只番茄 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Aimee">
+    
+    
+
+    <meta name="description" content="DQN作为DRL的开山之作，DeepMind的DQN可以说是每一个入坑深度增强学习的同学必了解的第一个算法了吧。先前，将RL和DL结合存在以下挑战：1.deep learning算法需要大量的labeled data，RL学到的reward 大都是稀疏、带噪声并且有延迟的（延迟是指action 和导致的reward之间）；2.DL假设样本独立；而RL前后state状态相关；3.DL假设分布固定，而">
+<meta name="keywords" content="reinforcement learning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文阅读——DQN系列 | 一只番茄">
+<meta property="og:url" content="http://yoursite.com/2019/01/27/论文阅读——DQN系列/index.html">
+<meta property="og:site_name" content="一只番茄">
+<meta property="og:description" content="DQN作为DRL的开山之作，DeepMind的DQN可以说是每一个入坑深度增强学习的同学必了解的第一个算法了吧。先前，将RL和DL结合存在以下挑战：1.deep learning算法需要大量的labeled data，RL学到的reward 大都是稀疏、带噪声并且有延迟的（延迟是指action 和导致的reward之间）；2.DL假设样本独立；而RL前后state状态相关；3.DL假设分布固定，而">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1896143-c47ff3f88f22614f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1896143-bdce53f90ca661e0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1896143-538a11626d8110a7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1896143-f5d3070203db2bd3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1896143-cb5566154cd77ecd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1896143-1054a22a109faac1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-01-27T14:02:16.229Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="论文阅读——DQN系列 | 一只番茄">
+<meta name="twitter:description" content="DQN作为DRL的开山之作，DeepMind的DQN可以说是每一个入坑深度增强学习的同学必了解的第一个算法了吧。先前，将RL和DL结合存在以下挑战：1.deep learning算法需要大量的labeled data，RL学到的reward 大都是稀疏、带噪声并且有延迟的（延迟是指action 和导致的reward之间）；2.DL假设样本独立；而RL前后state状态相关；3.DL假设分布固定，而">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1896143-c47ff3f88f22614f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+<body>
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">一只番茄</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">论文阅读——DQN系列</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2019-01-27" class="post-meta__date date">2019-01-27</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+             &#8226; 标签:
+            <font class="tags">
+              <a class="tags-link" href="/tags/reinforcement-learning/">reinforcement learning</a>
+            </font>
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <h3 id="DQN"><a href="#DQN" class="headerlink" title="DQN"></a>DQN</h3><p>作为DRL的开山之作，DeepMind的DQN可以说是每一个入坑深度增强学习的同学必了解的第一个算法了吧。先前，将RL和DL结合存在以下挑战：1.deep learning算法需要大量的labeled data，RL学到的reward 大都是稀疏、带噪声并且有延迟的（延迟是指action 和导致的reward之间）；2.DL假设样本独立；而RL前后state状态相关；3.DL假设分布固定，而RL在学习新的行为时，数据分布会变化。DQN通过Q-Learning使用reward来构造标签、使用经验池等方法解决了这些问题。<br><a id="more"></a></p>
+<h4 id="基于Q-learning-确定Loss-Function"><a href="#基于Q-learning-确定Loss-Function" class="headerlink" title="基于Q-learning 确定Loss Function"></a>基于Q-learning 确定Loss Function</h4><p>Q-learning 更新公式为：</p>
+<script type="math/tex; mode=display">Q^∗(s,a)=Q(s,a)+α(r+\gamma \max_{a′} Q(s′,a′)−Q(s,a))</script><p>DQN 的 loss function：</p>
+<script type="math/tex; mode=display">L(\theta) = \mathbb E[targetnet- Q(s,a;\theta)]^2</script><script type="math/tex; mode=display">targetnet = r + \gamma \max_{a′} Q(s′,a′;\theta)</script><p>DQN使用随机梯度下降更新参数,为啥要把targetnet单独拎出来呢，后续会说的。</p>
+<h4 id="experience-replay"><a href="#experience-replay" class="headerlink" title="experience replay"></a>experience replay</h4><p>DQN 使用exprience replay解决instablity的问题，把每个时间步agent与环境交互得到的转移样本$(s<em>t,a_t,r_t,s</em>{t+1})$存储在buffer中，并被随机抽取。通过这种方式，去除了数据之前的相关性，并且缓和了数据分布的差异。</p>
+<h4 id="TargetNet"><a href="#TargetNet" class="headerlink" title="TargetNet"></a>TargetNet</h4><p>为了减少$action \ values \ Q$ 和 目标 $r + \gamma \max_{a’} Q(s′ , a′ )$之间的相关性，从而提高稳定性.2015年版的DQN加入了另一个网络——$\hat Q$作为targetnet,它和$Q$ 参数分离，每次参数更新只更新$Q$ ，而$\hat Q$的参数$\theta’$保持不变,并且周期性的将$Q$的参数复制给$\hat Q$。此时，loss function变为：</p>
+<script type="math/tex; mode=display">L(\theta) = \mathbb E[r + \gamma \max_{a′} Q(s′,a′;\theta')- Q(s,a;\theta)]^2</script><p><img src="https://upload-images.jianshu.io/upload_images/1896143-c47ff3f88f22614f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="DQN算法伪代码"></p>
+<h3 id="double-DQN"><a href="#double-DQN" class="headerlink" title="double DQN"></a>double DQN</h3><p>在标准的Q-learning,和DQN中，参数是这么更新的：</p>
+<script type="math/tex; mode=display">\theta_{t+1}=\theta_t+\alpha(y_t^Q - Q(s_t,a_t;\mathbf{\theta_t}))∇_{\theta_t}Q(s_t,a_t;\mathbf{\theta_t})</script><script type="math/tex; mode=display">y_t^Q = r_{t+1}+\gamma \max_a Q(s_{t+1},a;\mathbfNaN)</script><p>max操作使得估计的值函数比值函数的真实值大。如果是均匀的过估计，找到的最优策略是不会变的，不会对我们的目标造成影响。但实际上，过估计的误差在不同的states和actions下是不同的，这就会影响到我们找到最佳策略了。为了减少overestimation，<a href="https://arxiv.org/abs/1509.06461" target="_blank" rel="noopener">van Hasselt et al.</a>(2016)提出Double DQN(D-DQN)。利用DQN中的target network,将selection 和 evelation 解藕。使用Behavior Network选择出value最大的action，用target network来估计它的值$y_t^Q$被更改为：</p>
+<script type="math/tex; mode=display">y_t^{DDQN} = r_{t+1} + \gamma Q(s_{t+1},\arg\max_a(s_{t+1},a;\mathbf{\theta_t});\mathbf{\theta_t^-})</script><p>PS 论文中有对两个数学定理的详细证明，感兴趣的同学可以看哦</p>
+<h3 id="Prioritized-Experience-Replay"><a href="#Prioritized-Experience-Replay" class="headerlink" title="Prioritized Experience Replay"></a>Prioritized Experience Replay</h3><p>在前面的方法中，experience replay都是均匀随机采样，但实际上不同样本的重要性显然是不同的。举个例子，在强化学习初期，replay memory中，除了直接和目标相关的state-action pair 有正值，大部分的value都为0，大量的从zero-value state 到 另一个 zero-value state 的transitions更新导致很低效。<a href="http://dl.acm.org/citation.cfm?id=178741" target="_blank" rel="noopener">Moore &amp; Atkeson, 1993</a> 提出Prioritized Sweeping，优先选择value改变了的state。具体算法如下：<br><img src="https://upload-images.jianshu.io/upload_images/1896143-bdce53f90ca661e0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="prioritized sweeping"><br>但Prioritized sweeping 主要用在model based planning。<a href="https://arxiv.org/pdf/1511.05952.pdf" target="_blank" rel="noopener">Schaul et al. (2016) </a>提出了Prioritized Experience Replay。</p>
+<ol>
+<li><p>Prioritizing TD-Error<br>用 TD-error来规定优先学习的程度. 如果$\delta$越大, 就代表我们的预测精度还有很多上升空间, 那么这个样本就越需要被学习, 也就是优先级越高。通过存储transition,及其每次回放更新得到的最新的TD-error，将TD-error绝对值最大的transition从 memory 中进行回放。然后对该transition进行Q-learning的更新，并根据TD-error,更新其优先级。而对于没有已知TD-error的新进入memory的transition，将其放到最大优先级的行列，以确保所有的经验至少被回放一次。</p>
+</li>
+<li><p>Stochastic Prioritization<br>greedy TD-error prioritization有以下问题：1.那些TD-error很小的transition 将很长时间不被replay.2.对noise spikes 敏感。最终算法会集中在一个小子集里面。初始TD-error很高的transitions会经常被重放，缺失多样性会导致over-fitting。作者提出了一种介于均匀随机采样和贪心优先之间的随机采样方法，transition $i$ 的采样概率为：</p>
+<script type="math/tex; mode=display">P(i) = \frac{p^\alpha_i}{\sum_kp^\alpha_k}</script><p>其中，$p<em>i$是$i$的优先级。这样，即使是最低优先级的transition被采样到的概率也不为0.$p_i$的设定有多种方法。<br>第一种是成比例优先。$p_i = |\delta| + \varepsilon$.$\varepsilon$用来防止transitions的TD-error为0后不再被回放。具体实现中，使用名为sum-tree的树型数据结构。它的每个叶子节点保存了 transition priorities，父节点存储了孩子节点值之和，这样，头节点的值就是所有叶子结点的总和$p</em>{total}$。采样一个大小为$k$的minibatch时，range$[0,p_{total}]$被均分为$k$个ranges，每个ranges均匀采样，这样，各种$|\delta|$的transitions都有被采样到。<br>第二种是$p_i = \frac{1}{rank(i)}$。$rank(i)$是transition $i$根据它的$|\delta|$在replay memory中的rank。这种方法对异常值更加不敏感，因此更为鲁棒。作者最终使用了基于array的二叉堆实现的优先队列来存储transitions。</p>
+</li>
+<li>Importance Sampling<br>Prioritized replay 改变了分布，因此引入了bias。为了消除bias，作者使用了importance-sampling(IS) weights：<script type="math/tex; mode=display">w_i = ({\frac{1}{N}} \cdot {\frac{1}{P(i)}})^ \beta</script>Q-learning更新中的$\delta_i$替换为$w_i\delta_i$，并出于stability的原因，用$\frac{1}{\max_iw_i}$将权值正则化。<br><img src="https://upload-images.jianshu.io/upload_images/1896143-538a11626d8110a7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Prioritized Sweeping"></li>
+</ol>
+<h3 id="Dueling-Network-Architectures-for-Deep-Reinforcement-Learning"><a href="#Dueling-Network-Architectures-for-Deep-Reinforcement-Learning" class="headerlink" title="Dueling Network Architectures for Deep Reinforcement Learning"></a>Dueling Network Architectures for Deep Reinforcement Learning</h3><p><a href="https://arxiv.org/pdf/1511.06581.pdf" target="_blank" rel="noopener">Wang et al. (2016b)</a>在网络结构上做了创新，这种新的网络结构能够更容易的与当前和未来的RL算法相结合。<br>作者引入了<em>advantage function</em>。<script type="math/tex">A^π (s, a) = Q^π (s, a) − V^ π (s).</script><br>$Vi$关注的是state的值，$Ai$关注的是这个状态下，动作的重要性。$Q$估计的是在这一状态下选择某一动作的价值。因为在某些状态下，无论做什么动作对下一个状态都没有太大影响，而这种方法，可以单独学习状态本身的价值。<br><img src="https://upload-images.jianshu.io/upload_images/1896143-f5d3070203db2bd3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="dueling network architecture.png"><br>如上图，作者将原来的DQN最后的一条全联接层一分为二，一个用来估计value functions,一个用来估计advantage function。最后将两条流聚合成输出Q function。<br>相应的Q function变为：</p>
+<script type="math/tex; mode=display">Q(s,a;\theta,\alpha,\beta) = V(s;\theta,\beta) + （A(s,a;\theta,\alpha) - \max_{a'\in{|A|}}A(s,a';\theta,\alpha)）</script><p>$\alpha$和$\beta$是两个全联接层分支的参数， 那为什么要减去$\max<em>{a’\in{|A|}}A(s,a’;\theta,\alpha)$呢。这是因为给定一个Q，我们无法给出一个唯一的V和A（拥有两个变量的一个方程式，当然有无穷多解）。为了解决这一问题，作者强制让被选择的动作的advantage为0，即$A(s,a;\theta,\alpha) - \max</em>{a’\in{|A|}}A(s,a’;\theta,\alpha)$。<br>这样，$a^<em> = arg\max<em>{a’}Q(s,a’;\theta,\alpha,\beta) = arg\max</em>{a’}A(s,a’;\theta,\alpha)$<br>$Q(s,a</em>,\theta,\alpha,\beta) = V(s;\theta,\beta)$<br>在实际应用中，作者用均值代替了最大值操作，即：</p>
+<script type="math/tex; mode=display">Q(s,a;\theta,\alpha,\mathbf{\beta}) = V(s;\theta,\beta)+(A(s,a;\theta,\alpha)-\frac{1}{|A|}\sum_{a'}A(s,a';\theta,\alpha))</script><p>这样，可以缩小 Q 值的范围，去除多余的自由度，且期望值为0,提高算法稳定性</p>
+<h3 id="Distributional-value-function"><a href="#Distributional-value-function" class="headerlink" title="Distributional value function"></a>Distributional value function</h3><p>强化学习一般是对智体收到的随机return的期望进行建模，但实际上，这些随机return的分布——value distribution是非常有用的。</p>
+<blockquote>
+<p>It’s already evident from our empirical results that the distributional perspective leads to better, more stable reinforcement learning</p>
+</blockquote>
+<p><a href="https://arxiv.org/pdf/1707.06887.pdf" target="_blank" rel="noopener">Bellemare et al. (2017)</a>提出贝尔曼方程的一个变体，实际上可以预测所有可能的结果，而不用对它们进行平均 —— distributional Bellman’s equation</p>
+<script type="math/tex; mode=display">Z(x,a)=R(x,a)+\gamma Z(X′,A′)</script><p>具体算法如下：<br><img src="https://upload-images.jianshu.io/upload_images/1896143-cb5566154cd77ecd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="categorical algorithm"></p>
+<p>网络结构上的改变：<br>传统的DQN最后一层全联接层输出的是$N$维向量，表示当前状态下，每一个动作的价值的估计。Categorical DQN 输出的是$N \times M$维，表示的是表示的是 N 个动作在 M 个价值分布的支撑上的概率。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">def _network_template(self, state):</span><br><span class="line">  &quot;&quot;&quot;Builds a convolutional network that outputs Q-value distributions.</span><br><span class="line">  Args:</span><br><span class="line">    state: `tf.Tensor`, contains the agent&apos;s current state.</span><br><span class="line">  Returns:</span><br><span class="line">    net: _network_type object containing the tensors output by the network.</span><br><span class="line">  &quot;&quot;&quot;</span><br><span class="line">  weights_initializer = slim.variance_scaling_initializer(</span><br><span class="line">      factor=1.0 / np.sqrt(3.0), mode=&apos;FAN_IN&apos;, uniform=True)</span><br><span class="line"></span><br><span class="line">  net = tf.cast(state, tf.float32)</span><br><span class="line">  net = tf.div(net, 255.)</span><br><span class="line">  net = slim.conv2d(</span><br><span class="line">      net, 32, [8, 8], stride=4, weights_initializer=weights_initializer)</span><br><span class="line">  net = slim.conv2d(</span><br><span class="line">      net, 64, [4, 4], stride=2, weights_initializer=weights_initializer)</span><br><span class="line">  net = slim.conv2d(</span><br><span class="line">      net, 64, [3, 3], stride=1, weights_initializer=weights_initializer)</span><br><span class="line">  net = slim.flatten(net)</span><br><span class="line">  net = slim.fully_connected(</span><br><span class="line">      net, 512, weights_initializer=weights_initializer)</span><br><span class="line">  net = slim.fully_connected(</span><br><span class="line">      net,</span><br><span class="line">      self.num_actions * self._num_atoms,</span><br><span class="line">      activation_fn=None,</span><br><span class="line">      weights_initializer=weights_initializer)</span><br><span class="line"></span><br><span class="line">  logits = tf.reshape(net, [-1, self.num_actions, self._num_atoms])</span><br><span class="line">  probabilities = tf.contrib.layers.softmax(logits)</span><br><span class="line">  q_values = tf.reduce_sum(self._support * probabilities, axis=2)</span><br><span class="line">  return self._get_network_type()(q_values, logits, probabilities)</span><br></pre></td></tr></table></figure></p>
+<p>orz其实这篇论文我看了<a href="https://github.com/google/dopamine/blob/master/dopamine/agents/rainbow/rainbow_agent.py" target="_blank" rel="noopener">代码</a>才懂了算法流程，但是并不能完全理解，有大佬可以解释一哈吗??<br>未完待续</p>
+<h3 id="A3C"><a href="#A3C" class="headerlink" title="A3C"></a>A3C</h3><p>asynchronous advantage actor-critic (A3C) [Mnih et al.(2016)] (<a href="https://arxiv.org/pdf/1602.01783.pdf)并不属于value-based算法，这里提到它一是因为DeepMind" target="_blank" rel="noopener">https://arxiv.org/pdf/1602.01783.pdf)并不属于value-based算法，这里提到它一是因为DeepMind</a> 在投给AAAI 2018的论文<a href="[https://arxiv.org/abs/1710.02298](https://arxiv.org/abs/1710.02298">Rainbow: Combining Improvements in Deep Reinforcement Learning
+</a><br>)中使用了A3C中的multi-step learning。</p>
+<p>论文中最为出彩的地方在于：在多个环境副本上并行地异步执行多个agent，不同的agent采用不同的策略，经历不同的state，有不同的transition,不但有助于探索，加快速度，而且使得时间上数据的相关性很小，起到稳定学习过程的作用。因此不需要使用又费计算又费资源的experience replay，这样就可以使用on-policy RL 方法。<br>算法有一个global network,和若干个agent，大概的步骤过程是：<br>1.agent 将global network的参数pull过来<br>2.agent与环境互动n-step或遇到terminal state 提前终止<br>3.agent计算loss，得到梯度<br>4.把梯度 push 给global network，用梯度更新<strong>global network</strong>的参数，然后reset自己，回到第一步<br><img src="https://upload-images.jianshu.io/upload_images/1896143-1054a22a109faac1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="A3C, each actor-learner thread, based on Mnih et al. (2016)"></p>
+<h3 id="Noisy-DQN"><a href="#Noisy-DQN" class="headerlink" title="Noisy DQN"></a>Noisy DQN</h3><p><a href="https://arxiv.org/pdf/1706.10295.pdf" target="_blank" rel="noopener">Fortunato et al. (2018)</a>提出在参数中加入噪声，代替$\epsilon$-greedy，增加模型的探索能力。</p>
+<h4 id="Noisynet"><a href="#Noisynet" class="headerlink" title="Noisynet"></a>Noisynet</h4><p>举个例子，设神经网络的一个linear layer 为：</p>
+<script type="math/tex; mode=display">y = w x + b</script><p>那么加入噪声后为：</p>
+<script type="math/tex; mode=display">y = (μ^w+σ^w⊙ε^w)x+μ^b+σ^b⊙ε^b</script><p>$ε$是均值为0的噪声，$μ$和$σ$都是可学习的参数。设$ζ$ 为$(\mu,σ)$<br>有两种噪声产生方法：<br>a.Independent Gaussian noise：为每一个权值和偏差都设定一个独立噪声。在这种情况下，若输入x是q维、输出y是p维，那么就需要p*q+q个$\epsilon$，</p>
+<p>b. Factorised Gaussian noise:通过将$ε^w<em>{i,j}$分解，大大减少了需要的噪声数量，只需要q+p个$\epsilon$即可。<br>$ε^w</em>{i,j}$和$ε^b_{j}$的计算公式为：</p>
+<script type="math/tex; mode=display">
+ε^w_{i,j} = f(ε_i)f(ε_j)</script><script type="math/tex; mode=display">
+ε^b_{j} = f(ε_j)</script><p>这里，作者将$f(x)$设为$f(x) = sgn(x)\sqrt{|x|}$</p>
+<p>NoisyNet 的loss function 为</p>
+<script type="math/tex; mode=display">\overline L(\theta)  = E(L(\xi))</script><p>梯度为</p>
+<script type="math/tex; mode=display">∇\overline L (ζ) = ∇E [L(θ)] = E [∇_{μ,σ}L(μ + σ ⊙ ε)] .</script><p>作者使用蒙特卡洛方法近似上面的梯度，得到</p>
+<script type="math/tex; mode=display">∇\overline L (ζ) \approx  ∇_{μ,σ}L(μ + σ ⊙ ε)</script><p><a href="https://baijiahao.baidu.com/s?id=1603966885135149423&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener"></a></p>
+<p>参考资料：<br><a href="https://morvanzhou.github.io/tutorials/machine-learning/reinforcement-learning/" target="_blank" rel="noopener">增强学习——周莫烦</a><br><a href="https://www.cnblogs.com/wangxiaocvpr/p/5660232.html" target="_blank" rel="noopener">论文阅读之：PRIORITIZED EXPERIENCE REPLAY</a><br><a href="https://zhuanlan.zhihu.com/p/21547911" target="_blank" rel="noopener">DQN从入门到放弃</a><br><a href="">reinforcement learning:an introduction</a><br><a href="">deep reinforcement learning:An overview</a><br><a href="https://spinningup.openai.com" target="_blank" rel="noopener">spinning up</a><br><a href="http://www.dataguru.cn/article-12258-1.html" target="_blank" rel="noopener">DeepMind为明年的AAAI，准备了一份各种DQN的混血</a><br><a href="https://deepmind.com/blog/going-beyond-average-reinforcement-learning/" target="_blank" rel="noopener">Going beyond average for reinforcement learning</a><br><a href="https://zhang-yi-chi.github.io/2018/09/19/DistributionalRL/" target="_blank" rel="noopener">Distributional Reinforcement Learning</a><br><a href="https://blog.csdn.net/gsww404/article/details/80820994" target="_blank" rel="noopener">深度强化学习系列之（8）——- A3C算法原理及Tensorflow实现</a><br><a href="https://www.cnblogs.com/wangxiaocvpr/p/8110120.html" target="_blank" rel="noopener">一文读懂 深度强化学习算法 A3C （Actor-Critic Algorithm</a></p>
+
+  </section>
+
+  <section class="post-comments">
+
+    <!-- 将评论系统（例如Disqus、多说、友言、畅言等）提供的代码片段粘贴在这里 -->
+    
+</section>
+
+
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>
