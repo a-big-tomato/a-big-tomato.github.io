@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      论文阅读——learning to navigate in complex environments | 一只番茄 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Aimee">
+    
+    
+
+    <meta name="description" content="introductionchallenge在部分可观察环境中使⽤RL来学会导航，存在以下困难：1.奖励稀疏2.对于环境中各种不同的动态元素，需要agent⽤不同⻓短的时间来记忆不同的东⻄：a. 对于⽬标， one-shotb.速度信号和视野中的障碍，短时记忆c.环境中的不变的部分（边界，线索），⻓时记忆">
+<meta name="keywords" content="reinforcement learning,navigates">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文阅读——learning to navigate in complex environments | 一只番茄">
+<meta property="og:url" content="http://yoursite.com/2019/02/17/论文阅读——learning-to-navigate-in-complex-environments/index.html">
+<meta property="og:site_name" content="一只番茄">
+<meta property="og:description" content="introductionchallenge在部分可观察环境中使⽤RL来学会导航，存在以下困难：1.奖励稀疏2.对于环境中各种不同的动态元素，需要agent⽤不同⻓短的时间来记忆不同的东⻄：a. 对于⽬标， one-shotb.速度信号和视野中的障碍，短时记忆c.环境中的不变的部分（边界，线索），⻓时记忆">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://s2.ax1x.com/2019/02/17/kyX7SP.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/02/17/kyXHQf.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/02/17/kyXqOS.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/02/17/kyXby8.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/02/17/kyXXwQ.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/02/17/kyXzYn.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/02/17/kyXxFs.png">
+<meta property="og:updated_time" content="2019-02-17T16:00:35.505Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="论文阅读——learning to navigate in complex environments | 一只番茄">
+<meta name="twitter:description" content="introductionchallenge在部分可观察环境中使⽤RL来学会导航，存在以下困难：1.奖励稀疏2.对于环境中各种不同的动态元素，需要agent⽤不同⻓短的时间来记忆不同的东⻄：a. 对于⽬标， one-shotb.速度信号和视野中的障碍，短时记忆c.环境中的不变的部分（边界，线索），⻓时记忆">
+<meta name="twitter:image" content="https://s2.ax1x.com/2019/02/17/kyX7SP.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+<body>
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">一只番茄</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">论文阅读——learning to navigate in complex environments</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2019-02-17" class="post-meta__date date">2019-02-17</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+             &#8226; 标签:
+            <font class="tags">
+              <a class="tags-link" href="/tags/navigates/">navigates</a>, <a class="tags-link" href="/tags/reinforcement-learning/">reinforcement learning</a>
+            </font>
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <h3 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h3><h4 id="challenge"><a href="#challenge" class="headerlink" title="challenge"></a>challenge</h4><p>在部分可观察环境中使⽤RL来学会导航，存在以下困难：<br>1.奖励稀疏<br>2.对于环境中各种不同的动态元素，需要agent⽤不同⻓短的时间来记忆不同的东⻄：<br>a. 对于⽬标， one-shot<br>b.速度信号和视野中的障碍，短时记忆<br>c.环境中的不变的部分（边界，线索），⻓时记忆<br><a id="more"></a><br><img src="https://s2.ax1x.com/2019/02/17/kyX7SP.png" alt="challenge"></p>
+<h4 id="approach"><a href="#approach" class="headerlink" title="approach"></a>approach</h4><p><img src="https://s2.ax1x.com/2019/02/17/kyXHQf.png" alt="challenge"><br>为了增加增强学习的数据有效性，完成找东⻄的任务，论⽂考虑了两个辅助任务，⼀个深度图预测，输<br>⼊视觉图像给出深度信息，这样有利于避障和短期的路径规划。⼀个是有关slam的循环闭包，就是让<br>agent 预测这个地⽅我是否来过。</p>
+<h4 id="architecture"><a href="#architecture" class="headerlink" title="architecture"></a>architecture</h4><p><img src="https://s2.ax1x.com/2019/02/17/kyXqOS.png" alt="architecture"><br>作者试了多种不同的⽹络结构图。 a.FF A3C是最简单的⽹络结构，只有⼀个CNN卷积神经⽹络（也就是<br>上图的enc)⽤于图像的解码encode，然后进⼊⼀个全连接层，输出动作和价值。 b.LSTM A3C增加了<br>LSTM记忆模块，即图像通过CNN提取了特征之后，输⼊到LSTM，使得整个⽹络能够记忆之前的图像信<br>息。 c.加⼊了上⼀次的动作信息a和上⼀次的回馈信息reward。构造了两层LSTM⽹络，第⼀层LSTM⽹<br>络输⼊图像特征信息和上⼀次的reward信息，第⼆层⽹络输⼊图像特征信息、上⼀个LSTM的输出，及<br>当前的价值和上⼀次的动作。然后说d.图<br>Details:<br>action : rotations,accelerate forward or backward or sideways,+ rotation<br>input：当前图像信息，上⼀次的动作信息a和上⼀次的回馈信息reward</p>
+<h4 id="auxiliary-tasks"><a href="#auxiliary-tasks" class="headerlink" title="auxiliary tasks"></a>auxiliary tasks</h4><p><img src="https://s2.ax1x.com/2019/02/17/kyXby8.png" alt="architecture"><br>d.则是多加了两类loss.<br>深度图可以提供环境3D结构的⼤量信息，因此这⾥除了主线训练A3C之外，在CNN⽹络之后，⼜在外部<br>引出⼀个深度信息Depth的输出。作者通过实验证明，将深度信息作为输⼊，远没有作为⽀线预测任务<br>的效果好——⽽且这个好处是超出“导航”范围的（然后通过在仿真环境中获取深度数据单独训练CNN⽹<br>络。？？）<br>然后对于深度预测有两种⽅法，⼀个是将它看成回归问题，⼀个是把他看成分类问题。在实际操作中，<br>作者将它分为8类这样做更快收敛。 (实验中，是$pow(\frac{depth value }{256},10)$,最后区间划分为</p>
+<p> [0,005,0.175,0.3,0.425,0.55,0.675,0.8,1])<br>另⼀个是判断机器⼈是不是⾛过某⼀个位置，也就是是否进⼊循环loop中,这样有利于有效的探索和空间推理。对于当前点pt,存在之前⾛过的点pt’与之相似，输出为1，没有则为0。为了避免轨迹的连续点上的微⼩闭环，我们在添加额外条件<br>——中间点pt’‘远离pt。</p>
+<h3 id="experiments"><a href="#experiments" class="headerlink" title="experiments"></a>experiments</h3><p><img src="https://s2.ax1x.com/2019/02/17/kyXXwQ.png" alt="experiments"><br>下⾯是游戏场景：<br>过程是，起始点是随机的，然后⼀旦agent到达⽬标后，⻢上随机初始化在⼀个起点，然后继续寻路回<br>到⽬标，直到回到⽬标的时间固定位置。尝试了三种maze,goal 和fruit固定的静态maze，以及goal和<br>fruit会变的动态maze（每个回合中是不变的）<br>从下图的验证结果来看， Nav A3C+D2效果最好， static1和static 2达到human-level。在random 分别达到了91%和59%。 </p>
+<h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h4><p>这篇文章的亮点应该是将深度预测和判断循环作为附加任务提升了效果和训练速度，我猜测是否是因为将深度预测作为子任务引到了agent更加注意到深度信息？？</p>
+<p>找到了源码想跑跑看,如果加了额外的移动路障，比如考虑防撞——可以把撞到之前的行驶距离作为一个奖励？？是否能够依旧有好的效果</p>
+<p>此外，我找到了两篇相关的文章：<br><img src="https://s2.ax1x.com/2019/02/17/kyXzYn.png" alt="do deep reinforcement learning algorithms really learn to navigate"></p>
+<p>一篇将model的attention可视化，可以看出，重生时attention均匀分布，走廊中导航时，迅速发生变化，集中到某一区域，然后关注目标，apple,和贴纸</p>
+<p>这篇文章，也尝试了test和train map不一样的情况，模型失败了。作者提出疑问，DRL真的学会寻路了吗？<br><img src="https://s2.ax1x.com/2019/02/17/kyXxFs.png" alt="learning to navigate in cities without a map"></p>
+<p>一篇将他用到了真实环境数据中，两层lstem,一层学习地区特定信息，当前位置和目标位置信息，一层学习区域不变性信息，因此，第一层可以换个城市就替换掉，而第二层时固定不变的</p>
+
+  </section>
+
+  <section class="post-comments">
+
+    <!-- 将评论系统（例如Disqus、多说、友言、畅言等）提供的代码片段粘贴在这里 -->
+    
+</section>
+
+
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>
