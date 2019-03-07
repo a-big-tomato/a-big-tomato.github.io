@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      论文阅读：Value Propagation Networks | 一只番茄 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Aimee">
+    
+    
+
+    <meta name="description" content="introductionVPN规范了VIN的使用，有三大优点：（1）引入 VProp——这是一个网络规划模块，通过强化学习能成功学习解决路径搜寻任务（2）展现了只在小图训练的基础上也具有的在大型未见过的地图中泛化的能力，（3）无论是在转换函数还是观察复杂度方面，可以学习在更复杂的动态环境中进行规划">
+<meta name="keywords" content="reinforcement learning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文阅读：Value Propagation Networks | 一只番茄">
+<meta property="og:url" content="http://yoursite.com/2019/03/07/论文阅读：Value-Propagation-Networks/index.html">
+<meta property="og:site_name" content="一只番茄">
+<meta property="og:description" content="introductionVPN规范了VIN的使用，有三大优点：（1）引入 VProp——这是一个网络规划模块，通过强化学习能成功学习解决路径搜寻任务（2）展现了只在小图训练的基础上也具有的在大型未见过的地图中泛化的能力，（3）无论是在转换函数还是观察复杂度方面，可以学习在更复杂的动态环境中进行规划">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://s2.ax1x.com/2019/03/07/kxWKFs.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/03/07/kxWmwQ.png">
+<meta property="og:image" content="http://yoursite.com/2019/03/07/论文阅读：Value-Propagation-Networks/![img](https://s2.ax1x.com/2019/03/07/kxWeeg.png">
+<meta property="og:updated_time" content="2019-03-07T13:32:12.877Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="论文阅读：Value Propagation Networks | 一只番茄">
+<meta name="twitter:description" content="introductionVPN规范了VIN的使用，有三大优点：（1）引入 VProp——这是一个网络规划模块，通过强化学习能成功学习解决路径搜寻任务（2）展现了只在小图训练的基础上也具有的在大型未见过的地图中泛化的能力，（3）无论是在转换函数还是观察复杂度方面，可以学习在更复杂的动态环境中进行规划">
+<meta name="twitter:image" content="https://s2.ax1x.com/2019/03/07/kxWKFs.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+<body>
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">一只番茄</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">论文阅读：Value Propagation Networks</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2019-03-07" class="post-meta__date date">2019-03-07</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+             &#8226; 标签:
+            <font class="tags">
+              <a class="tags-link" href="/tags/reinforcement-learning/">reinforcement learning</a>
+            </font>
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <h3 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h3><p>VPN规范了VIN的使用，有三大优点：（1）引入 VProp——这是一个网络规划模块，通过强化学习能成功学习解决路径搜寻任务（2）展现了只在小图训练的基础上也具有的在大型未见过的地图中泛化的能力，（3）无论是在转换函数还是观察复杂度方面，可以学习在更复杂的动态环境中进行规划<br><a id="more"></a></p>
+<h3 id="model"><a href="#model" class="headerlink" title="model"></a>model</h3><p><strong>VIN</strong>可以看成有三部分组成：（a）当前观察的嵌入函数Φ，（b）在嵌入输出上运行K次迭代的规划算法，以及（c） 控制策略π，它通过训练期间的采样或在测试时取最大值来输出最终动作。 特别是，原始的VIN方法可以通过以下三种选择来总结：</p>
+<p><img src="https://s2.ax1x.com/2019/03/07/kxWKFs.png" alt="VIN"></p>
+<p>VIN将转移概率编码为卷积的权重，卷积的平移不变性意味着在一种状态下的转移概率，不依赖于它的内容或周围的内容。这个限制会影响模型学习复杂的动态性，（同时也人为地约束网络的设计和其他参数）</p>
+<p>作者首先引入了<strong>VProp</strong>：</p>
+<p>他观察到，转移概率和我们所在的state有关，所以作者用$\bar{r}^{in}<em>{i’,j’}$ 和 $\bar{r}^{out}</em>{i,j}$ 分别表示进入一个state 和离开一个state的价值，用$r^{in}<em>{i’,j’} - r^{out}</em>{i,j}$表示从$(i,j)$ 转移到$(i’,j’)$ 得到的reward.用$p_{i,j}$表示value进入$(i,j)$的传播，作者设定​$p(i,j|i’,j’)=p(i,j)$，只关注agent当前state,而不关心他从哪儿来，这限制了参数强调了state的可达性，提供了低成本灵活的方式来model复杂的reward function</p>
+<p><img src="https://s2.ax1x.com/2019/03/07/kxWmwQ.png" alt="VIN"></p>
+<p>VProp 模型对应一个确定的reward从相邻state到当前state的模型，捕捉先前state的可达性不仅依赖于agent所在位置相邻的单元，还有潜在的观察到的转移的动态。表示一个状态不可达，设置他的p为0，$r^{in}$为负值，目标状态的p近于0，并且有个正的$r^{in}$ ，而其他类型的状态有着收折扣因子限制的高p值，而他们的cost来自于正$\bar{r}^{out}$ 或者 $\bar{r}_{in}$</p>
+<p><strong>Vprop</strong>也有限制，当goal的$\bar{r}^{in}$为1，其他类型的为0，goal的$\bar{r}^{out}$为-1,然后其他的为-0.02,$p$都为1，若是在50X50的大地图上，最短路径很有可能超过50，那么，$max(p<em>{i,j}v</em>{i,j}+r^{in}<em>{i’j’}-r^{out}</em>{i,j})$ 就会比0小，那么价值就停止传播了。于是作者提出了第二个方法——<br><strong>MVProp</strong></p>
+<p><img src="![img](https://s2.ax1x.com/2019/03/07/kxWeeg.png" alt="MVprop"></p>
+<p>这种传播方式保证了值在低值单元方向上的传递。路径长度是累乘传播，而reward map用于区分是goal 还是其他类型。基于此，最佳策略能够在本地遵循最大值的方向</p>
+<h3 id="experiments"><a href="#experiments" class="headerlink" title="experiments"></a>experiments</h3><p>作者将VIN，VProp，和MVProp 用于RL（而非VIN论文中的IL）进行实验对比效果，MVProp不但在寻找路径上效果惊人的好，可以达到100%，并且可以在训练时加入动态环境（1种是遵循A*算法的敌人，另一种小方块掉落）</p>
+
+  </section>
+
+  <section class="post-comments">
+
+    <!-- 将评论系统（例如Disqus、多说、友言、畅言等）提供的代码片段粘贴在这里 -->
+    
+</section>
+
+
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>
