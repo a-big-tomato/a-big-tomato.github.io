@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      论文题目：observe and look further:achieving consistent performance on Atari | 一只番茄 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Aimee">
+    
+    
+
+    <meta name="description" content="阅读这篇文章的原因是openai-five 提到了$\gamma$的调整时提到了这篇文章 RL算法难达到人类水平的难点： 1.处理多样的rewards分布 2.长期推理 3.高效探索 作者贡献： 改进的贝尔曼公式解决rewards密度和尺度多样化（问题1） 加入时序一致性损失，防止过早泛化（问题2） 人类示范辅助agent（问题3） 1.transformed bellman operator D">
+<meta name="keywords" content="reinforcement learning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文题目：observe and look further:achieving consistent performance on Atari | 一只番茄">
+<meta property="og:url" content="http://yoursite.com/2019/03/13/论文题目——observe-and-look-further-achieving-consistent-performance-on-Atari/index.html">
+<meta property="og:site_name" content="一只番茄">
+<meta property="og:description" content="阅读这篇文章的原因是openai-five 提到了$\gamma$的调整时提到了这篇文章 RL算法难达到人类水平的难点： 1.处理多样的rewards分布 2.长期推理 3.高效探索 作者贡献： 改进的贝尔曼公式解决rewards密度和尺度多样化（问题1） 加入时序一致性损失，防止过早泛化（问题2） 人类示范辅助agent（问题3） 1.transformed bellman operator D">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://wx3.sinaimg.cn/large/5ada4609ly1g10gzeimv0j216n0irtbv.jpg">
+<meta property="og:image" content="http://wx4.sinaimg.cn/large/5ada4609ly1g10gzrkyz2j20ou09gdhu.jpg">
+<meta property="og:image" content="http://wx3.sinaimg.cn/large/5ada4609ly1g10gzmll4bj20mt0rytas.jpg">
+<meta property="og:updated_time" content="2019-03-12T16:32:07.396Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="论文题目：observe and look further:achieving consistent performance on Atari | 一只番茄">
+<meta name="twitter:description" content="阅读这篇文章的原因是openai-five 提到了$\gamma$的调整时提到了这篇文章 RL算法难达到人类水平的难点： 1.处理多样的rewards分布 2.长期推理 3.高效探索 作者贡献： 改进的贝尔曼公式解决rewards密度和尺度多样化（问题1） 加入时序一致性损失，防止过早泛化（问题2） 人类示范辅助agent（问题3） 1.transformed bellman operator D">
+<meta name="twitter:image" content="http://wx3.sinaimg.cn/large/5ada4609ly1g10gzeimv0j216n0irtbv.jpg">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+<body>
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">一只番茄</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">论文题目：observe and look further:achieving consistent performance on Atari</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2019-03-13" class="post-meta__date date">2019-03-13</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+             &#8226; 标签:
+            <font class="tags">
+              <a class="tags-link" href="/tags/reinforcement-learning/">reinforcement learning</a>
+            </font>
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>阅读这篇文章的原因是openai-five 提到了$\gamma$的调整时提到了这篇文章</p>
+<p>RL算法难达到人类水平的难点：</p>
+<p>1.处理多样的rewards分布</p>
+<p>2.长期推理</p>
+<p>3.高效探索</p>
+<p>作者贡献：</p>
+<p>改进的贝尔曼公式解决rewards密度和尺度多样化（问题1）</p>
+<p>加入时序一致性损失，防止过早泛化（问题2）</p>
+<p>人类示范辅助agent（问题3）</p>
+<p><strong>1.transformed bellman operator</strong></p>
+<p>DQN的贝尔曼公式定义为</p>
+<p>$(\Tau Q)(x; a) := E_{x’∼P (·|x;a)} [R(x; a) + γ\max_aQ(x’; a’) \ \ \ \ \  $</p>
+<p>参数更新方法：</p>
+<p>$\theta^k:=\arg\min<em>{\theta}E</em>{x,a}[L(f<em>\theta(x,a)-f</em>{\theta^{k-1}}(x,a))]$</p>
+<p>当$f_\theta^{k-1}(x,a)$方差过高，会导致算法发散。而常用的方法将rewards clip到[-1,1]范围内，可能会改变得到的最优策略。</p>
+<p>作者从value-action function考虑，使用一个线性函数h来实现减小rewards的尺度，</p>
+<p>$(\Tau<em>hQ)(x; a) := E</em>{x<em>0∼P</em>{(·|x;a)}} [hR(x; a) + γ max_ah^{-1}(Q(x’; a’)]$</p>
+<p>$h(z)=sign(z)(\sqrt{|z|+1}-1)+\varepsilon z$</p>
+<p>并用公式推理证明当h为线性函数，或者MDP是确定的，$\Tau_h$收敛到$h\circ Q^*$（实现了scaling）</p>
+<p>此时，贝尔曼公式带来的loss为：</p>
+<p>$E<em>{x;a} [L(f</em>θ(x; a) - (\Tau<em>hf</em>{θ^{(k-1)}}(x; a))] ≈\sum^N<em>{i-1}<br>p_iL(f</em>θ(x<em>i; a_i) - h(r’_i + γh^{(-1)}(f</em>θ^{(k-1)}(x’<em>i; a’_i)))<br>=: L</em>{TD}(θ; (t<em>i)^N</em>{i=1}; (p<em>i)^N</em>{i=1}; θ^{(k-1)}) $</p>
+<p>(PS 更新replay buffer中的优先级时，使用的是$L_{TD}$)</p>
+<p><strong>2.Temporal consistency (TC) loss</strong> </p>
+<p>尽管改进了公式，但增加折扣因子$\gamma$会 降低了无奖励状态的state之间value的差分，因此当折扣因子$\gamma$非常接近1的时候，也会不稳定。为解决这个问题，作者增加了时间一致性loss</p>
+<p>$L<em>{TC}(θ; (ti)^N</em>{i=1}, (p<em>i)^N</em>{i=1}; θ^{(k-1)}) :=<br>\sum^{N}<em>{i=1}<br>p_iL (f</em>θ(x’_i; a’_i) - fθ^{(k-1)}(x’_i; a’_i)) $</p>
+<p>TC-loss惩罚了更新权值带来的下一个action-value $f_\theta(x’,a’)$估计的改变</p>
+<p><strong>3.Ape-X DQfD</strong></p>
+<p>模型有三方面组成：</p>
+<p>（1）replay buffer</p>
+<p>（2）actor process</p>
+<p>（3） learner process</p>
+<p><img src="http://wx3.sinaimg.cn/large/5ada4609ly1g10gzeimv0j216n0irtbv.jpg" alt="observe &amp; look further-achieving consistent performance的結構"></p>
+<p>replay buffer:算法包含两个replay buffer，一个是actor replay buffer（来自于actor process）,另一个expert replay buffer（离线存储的专家行为transition）每次采样时，25%来自专家，75%来自actor</p>
+<p>actor process：作者采用了类似Distributed prioritized experience replay中的方法。其中actor processes有m个 ，每个actor 基于当前action-value function采用$\varepsilon_i$-greedy 策略。其中：</p>
+<p>$\epsilon_i=0.1 ^{\alpha_i +3(1-\alpha_i)}$</p>
+<p>$\alpha_i=\frac{i-1}{m-1}$</p>
+<p>Learner process. learner process 从两个buffer中采样,最小化loss来近似最优action-value function.作者联合了模仿学习的loss——</p>
+<p>设$t_1… t_N $表示transition $t_i = (x_i; a_i; r’_i; x’_i; e_i)  $，其中$e_i$表示这个transition是否属于专家行为,$p_i$表示标准化的优先级，那么模仿学习的损失为：</p>
+<p>$L<em>{IM}(θ; (ti)^N</em>{i=1}, (p<em>i)^N</em>{i=1}, θ^(k-1)) :=\sum^N<em>{i=1}p_ie_i (\max</em>{a\in A}[f<em>θ(x_i; a) + λδ</em>{a\neq a<em>i}] - f</em>θ(x_i; a_i))$</p>
+<p>然后算法的总loss function 就是三者之和：</p>
+<p>$L(θ; (t<em>i)^N</em>{i=1}; (p<em>i)^N</em>{i=1}; θ^(k-1)) := (L<em>{TD} + L</em>{TC} + L<em>{IM})(θ; (t_i)^N </em>{i=1}; (p<em>i)^N</em>{i=1}; θ^(k-1)): $</p>
+<p>总体算法如下：<img src="http://wx4.sinaimg.cn/large/5ada4609ly1g10gzrkyz2j20ou09gdhu.jpg" alt="observe &amp; look further-achieving consistent performance algorithm"></p>
+<p>总体网络结构（基于标准的dueling DQN）如下：<img src="http://wx3.sinaimg.cn/large/5ada4609ly1g10gzmll4bj20mt0rytas.jpg" alt="observe &amp; look further-achieving consistent performance的架構"></p>
+
+  </section>
+
+  <section class="post-comments">
+
+    <!-- 将评论系统（例如Disqus、多说、友言、畅言等）提供的代码片段粘贴在这里 -->
+    
+</section>
+
+
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>
